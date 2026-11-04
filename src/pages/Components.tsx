@@ -1,9 +1,9 @@
 import { useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Textarea from '../components/ui/Textarea'
+import Text from '../components/ui/Text'
 import Checkbox from '../components/ui/Checkbox'
 import RadioGroup from '../components/ui/RadioGroup'
 import Switch from '../components/ui/Switch'
@@ -15,6 +15,8 @@ import ChipFilter from '../components/ui/ChipFilter'
 import RangeSlider from '../components/ui/RangeSlider'
 import Modal from '../components/ui/Modal'
 import Tabs from '../components/ui/Tabs'
+import BoxContainer from '../components/ui/BoxContainer'
+import ImageUpload from '../components/ui/ImageUpload'
 import Table, { type Column } from '../components/ui/Table'
 import Badge from '../components/ui/Badge'
 import CopyCell from '../components/ui/CopyCell'
@@ -107,6 +109,8 @@ export default function Components() {
   const [price, setPrice] = useState<[number, number]>([1500, 8000])
   const [sort, setSort] = useState<string[]>(['newest'])
   const [tab, setTab] = useState('details')
+  const [singleImage, setSingleImage] = useState<File[]>([])
+  const [multiImages, setMultiImages] = useState<File[]>([])
   const [modalOpen, setModalOpen] = useState(false)
 
   const productColumns: Column<ProductRow>[] = [
@@ -152,20 +156,9 @@ export default function Components() {
   const [range, setRange] = useState<DateRange>({ start: null, end: null })
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="flex items-center gap-4 border-b border-gray-200 bg-white px-6 py-4">
-        <Link
-          to="/dashboard"
-          className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100"
-          aria-label="Back to dashboard"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
-        <h1 className="text-lg font-bold text-gray-900">Component Library</h1>
-      </header>
-
-      <main className="mx-auto max-w-5xl space-y-6 p-6">
-        {/* Buttons */}
+    <div className="mx-auto max-w-5xl space-y-6">
+      <h1 className="text-2xl font-bold text-gray-900">Component Library</h1>
+      {/* Buttons */}
         <Section title="Buttons — variants">
           <Button variant="primary">Primary</Button>
           <Button variant="secondary">Secondary</Button>
@@ -307,6 +300,45 @@ export default function Components() {
               onRowClick={() => {}}
             />
           </div>
+        </Section>
+
+        {/* Image upload */}
+        <Section title="Image Upload (single & multiple)">
+          <div className="w-72">
+            <ImageUpload
+              label="Thumbnail (single)"
+              value={singleImage}
+              onChange={setSingleImage}
+            />
+          </div>
+          <div className="w-80">
+            <ImageUpload
+              label="Gallery (multiple)"
+              multiple
+              value={multiImages}
+              onChange={setMultiImages}
+            />
+          </div>
+        </Section>
+
+        {/* Box container (fieldset-style) */}
+        <Section title="Box Container (titled border)">
+          <BoxContainer title="Shipping Address" className="w-full max-w-md">
+            <div className="space-y-3 pt-1">
+              <Input label="Street" placeholder="123 Silk Road" />
+              <div className="flex gap-3">
+                <Input label="City" placeholder="Kolkata" />
+                <Input label="PIN" placeholder="700001" />
+              </div>
+            </div>
+          </BoxContainer>
+
+          <BoxContainer title="Summary" className="w-64">
+            <Text size="sm" variant="muted" className="pt-1">
+              Any content goes here — the box title sits on the border at the
+              top-left.
+            </Text>
+          </BoxContainer>
         </Section>
 
         {/* Tabs */}
@@ -494,10 +526,9 @@ export default function Components() {
           </div>
         </Section>
 
-        <Section title="Calendar (inline)">
-          <Calendar selected={calDate} onSelect={setCalDate} />
-        </Section>
-      </main>
+      <Section title="Calendar (inline)">
+        <Calendar selected={calDate} onSelect={setCalDate} />
+      </Section>
     </div>
   )
 }

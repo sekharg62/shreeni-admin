@@ -1,69 +1,104 @@
-import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, type FormEventHandler } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import Input from '../components/ui/Input'
+import Button from '../components/ui/Button'
+import Text from '../components/ui/Text'
+import { useAuth } from '../context/AuthContext'
+import { getApiErrorMessage } from '../services/apiClient'
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login, isAuthenticated } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // Already signed in → skip the login screen.
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />
+  }
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    // Dummy login — no real auth yet. Redirect to the dashboard.
-    navigate('/dashboard')
+    setError(null)
+    setLoading(true)
+    try {
+      await login({ email, password })
+      navigate('/dashboard')
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Login failed. Please try again.'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Shreeni Admin</h1>
-          <p className="mt-1 text-sm text-gray-500">Sign in to your dashboard</p>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-sm">
+        {/* Brand mark */}
+        <div className="mb-6 flex flex-col items-center">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-900 text-lg font-bold text-white">
+            S
+          </div>
+          <Text as="h1" size="xl" weight="bold">
+            Welcome back
+          </Text>
+          <Text size="sm" variant="muted" className="mt-1">
+            Sign in to the Shreeni admin dashboard
+          </Text>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-1.5 block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
+        {/* Card */}
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {error && (
+              <div className="rounded-lg bg-red-50 px-3 py-2">
+                <Text size="sm" variant="danger">
+                  {error}
+                </Text>
+              </div>
+            )}
+
+            <Input
               id="email"
+              label="Email"
               type="email"
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@shreeni.com"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 outline-none transition-colors focus:border-gray-900"
+              disabled={loading}
             />
-          </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-1.5 block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <input
+            <Input
               id="password"
+              label="Password"
               type="password"
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 outline-none transition-colors focus:border-gray-900"
+              disabled={loading}
             />
-          </div>
 
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700"
-          >
-            Sign In
-          </button>
-        </form>
+            <Button
+              type="submit"
+              fullWidth
+              size="lg"
+              isLoading={loading}
+              className="mt-2"
+            >
+              {loading ? 'Signing in…' : 'Sign in'}
+            </Button>
+          </form>
+        </div>
+
+        <Text size="xs" variant="subtle" align="center" className="mt-6">
+          © {new Date().getFullYear()} Shreeni. All rights reserved.
+        </Text>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { AlertCircle, Loader2, Trash2 } from 'lucide-react'
@@ -114,6 +114,8 @@ export default function ProductEditorPage({ id }: { id?: string }) {
   const [primaryKey, setPrimaryKey] = useState<string | null>(null)
   const [uploadPct, setUploadPct] = useState<number | null>(null)
   const [active, setActive] = useState<string>('basics')
+  /** After a menu click, keep that item highlighted while the page scrolls to it. */
+  const lockUntil = useRef(0)
 
   const load = useCallback(async () => {
     if (!id) return
@@ -138,12 +140,15 @@ export default function ProductEditorPage({ id }: { id?: string }) {
     const root = document.querySelector('main')
     if (!root) return
     const onScroll = () => {
+      if (Date.now() < lockUntil.current) return
       const top = root.getBoundingClientRect().top + 120
       let current: string = SECTIONS[0].id
       for (const s of SECTIONS) {
         const el = document.getElementById(s.id)
         if (el && el.getBoundingClientRect().top <= top) current = s.id
       }
+      // Short sections at the end can never reach the line above — at the bottom, the last one is current.
+      if (root.scrollTop + root.clientHeight >= root.scrollHeight - 4) current = SECTIONS[SECTIONS.length - 1].id
       setActive(current)
     }
     root.addEventListener('scroll', onScroll, { passive: true })
@@ -310,7 +315,11 @@ export default function ProductEditorPage({ id }: { id?: string }) {
               <li key={s.id}>
                 <button
                   type="button"
-                  onClick={() => scrollTo(s.id)}
+                  onClick={() => {
+                    setActive(s.id)
+                    lockUntil.current = Date.now() + 1000
+                    scrollTo(s.id)
+                  }}
                   aria-current={active === s.id ? 'true' : undefined}
                   className={cn(
                     'flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors',
@@ -495,7 +504,7 @@ export default function ProductEditorPage({ id }: { id?: string }) {
 
           {/* Sticky save bar */}
           {(isNew || dirty) && (
-            <div className="sticky bottom-0 z-20 -mx-6 -mb-6 flex items-center gap-3 border-t border-gray-200 bg-white/95 px-6 py-3 backdrop-blur" data-testid="save-bar">
+            <div className="sticky bottom-0 z-20 -mx-6 -mb-6 mt-8 flex items-center gap-3 border-t border-gray-200 bg-white/95 px-6 py-3 backdrop-blur" data-testid="save-bar">
               <p className="flex items-center gap-2 text-sm text-gray-600">
                 {uploadPct !== null ? (
                   <>

@@ -2,6 +2,8 @@ import type { LucideIcon } from 'lucide-react'
 import {
   Blocks,
   LayoutDashboard,
+  Megaphone,
+  MessageSquareText,
   Package,
   Settings,
   ShoppingCart,
@@ -26,9 +28,20 @@ export const navItems: NavItem[] = [
     children: [
       { label: 'Products', to: '/products' },
       { label: 'Categories', to: '/categories' },
-      { label: 'Inventory', to: '/inventory' },
+      { label: 'Collections', to: '/collections' },
+      { label: 'Tags', to: '/tags' },
+      { label: 'Colors', to: '/colors' },
     ],
   },
+  {
+    label: 'Marketing',
+    icon: Megaphone,
+    children: [
+      { label: 'Discounts', to: '/discounts' },
+      { label: 'Banners', to: '/banners' },
+    ],
+  },
+  { label: 'Reviews', icon: MessageSquareText, to: '/reviews' },
   { label: 'Orders', icon: ShoppingCart, to: '/orders' },
   { label: 'Customers', icon: Users, to: '/customers' },
   { label: 'Components', icon: Blocks, to: '/components' },

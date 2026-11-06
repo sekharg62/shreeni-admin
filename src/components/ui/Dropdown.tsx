@@ -62,7 +62,7 @@ export default function Dropdown({
         {open && (
           <ul
             role="listbox"
-            className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
+            className="absolute z-20 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
           >
             {options.map((opt) => {
               const isSelected = opt.value === value
@@ -79,8 +79,8 @@ export default function Dropdown({
                       isSelected ? 'font-medium text-gray-900' : 'text-gray-700',
                     )}
                   >
-                    {opt.label}
-                    {isSelected && <Check className="h-4 w-4 text-gray-900" />}
+                    <span className="whitespace-nowrap">{opt.label}</span>
+                    {isSelected && <Check className="h-4 w-4 shrink-0 text-gray-900" />}
                   </button>
                 </li>
               )

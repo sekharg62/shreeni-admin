@@ -22,14 +22,14 @@ export default function AdminLayout() {
           {user && (
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-xs font-semibold text-white">
-                {(user.name ?? user.email).charAt(0).toUpperCase()}
+                {(user.name ?? user.email ?? user.phone ?? 'A').charAt(0).toUpperCase()}
               </div>
               <div className="hidden sm:block">
                 <p className="text-sm font-medium leading-tight text-gray-900">
                   {user.name ?? 'Admin'}
                 </p>
                 <p className="text-xs leading-tight text-gray-500">
-                  {user.email}
+                  {user.email ?? user.phone}
                 </p>
               </div>
             </div>

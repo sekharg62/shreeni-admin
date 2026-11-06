@@ -1,13 +1,19 @@
 import apiClient, { AUTH_TOKEN_KEY } from './apiClient'
+import { ENDPOINTS } from '../constants/endpoints'
+import type { Role } from '../constants/enums'
 
-export type UserRole = 'CUSTOMER' | 'ADMIN'
+/** Kept as an alias so existing imports keep working. */
+export type UserRole = Role
 
 export interface AuthUser {
   id: string
-  email: string
+  email: string | null
+  firstName: string | null
+  lastName: string | null
+  /** "First Last", built by the backend */
   name: string | null
-  phone: string | null
-  role: UserRole
+  phone: string
+  role: Role
 }
 
 export interface LoginResponse {
@@ -23,7 +29,7 @@ export interface LoginPayload {
 export const authService = {
   /** POST /auth/login — verifies credentials, returns user + token. */
   async login(payload: LoginPayload): Promise<LoginResponse> {
-    const { data } = await apiClient.post<LoginResponse>('/auth/login', payload)
+    const { data } = await apiClient.post<LoginResponse>(ENDPOINTS.auth.login, payload)
     // Persist the token so the request interceptor can attach it.
     localStorage.setItem(AUTH_TOKEN_KEY, data.auth_token)
     return data

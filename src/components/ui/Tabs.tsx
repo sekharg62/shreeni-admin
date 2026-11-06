@@ -5,6 +5,8 @@ export type TabItem = {
   label: string
   value: string
   icon?: ReactNode
+  /** Small number pill after the label (e.g. pending reviews). */
+  count?: number
 }
 
 type TabsProps = {
@@ -35,6 +37,16 @@ export default function Tabs({ tabs, value, onChange }: TabsProps) {
           >
             {tab.icon}
             {tab.label}
+            {tab.count !== undefined && (
+              <span
+                className={cn(
+                  'min-w-5 rounded-full px-1.5 py-0.5 text-center text-[11px] font-semibold leading-none',
+                  active ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600',
+                )}
+              >
+                {tab.count}
+              </span>
+            )}
             {active && (
               <span className="absolute inset-x-0 -bottom-px h-0.5 bg-gray-900" />
             )}

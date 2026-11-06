@@ -7,6 +7,8 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   error?: string
   hint?: string
   leftIcon?: ReactNode
+  /** Text/element at the right edge inside the field, e.g. "%" or "₹". */
+  suffix?: ReactNode
 }
 
 export default function Input({
@@ -14,6 +16,7 @@ export default function Input({
   error,
   hint,
   leftIcon,
+  suffix,
   id,
   type = 'text',
   className,
@@ -51,6 +54,7 @@ export default function Input({
           )}
           {...props}
         />
+        {suffix && <span className="shrink-0 text-sm text-gray-500">{suffix}</span>}
         {isPassword && (
           <button
             type="button"

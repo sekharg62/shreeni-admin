@@ -3,8 +3,8 @@ import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
 export type Column<T> = {
-  /** Header label */
-  header: string
+  /** Header label (or a control, e.g. a select-all checkbox) */
+  header: ReactNode
   /** Cell renderer */
   cell: (row: T) => ReactNode
   align?: 'left' | 'center' | 'right'
@@ -21,6 +21,8 @@ type TableProps<T> = {
   rowKey: (row: T) => string | number
   onRowClick?: (row: T) => void
   emptyMessage?: string
+  /** Highlight a row (e.g. selected with a checkbox). */
+  isRowSelected?: (row: T) => boolean
 }
 
 const alignMap = {
@@ -35,6 +37,7 @@ export default function Table<T>({
   rowKey,
   onRowClick,
   emptyMessage = 'No data',
+  isRowSelected,
 }: TableProps<T>) {
   const [sort, setSort] = useState<SortState>(null)
 
@@ -122,6 +125,7 @@ export default function Table<T>({
                 className={cn(
                   'border-b border-gray-100 last:border-0 transition-colors',
                   onRowClick && 'cursor-pointer hover:bg-gray-50',
+                  isRowSelected?.(row) && 'bg-gray-50',
                 )}
               >
                 {columns.map((col, i) => (

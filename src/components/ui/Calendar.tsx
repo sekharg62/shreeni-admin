@@ -5,6 +5,7 @@ import {
   MONTHS,
   WEEKDAYS,
   addMonths,
+  formatDate,
   getMonthGrid,
   isBetween,
   isSameDay,
@@ -91,6 +92,8 @@ export default function Calendar({
               <button
                 type="button"
                 onClick={() => onSelect(day)}
+                aria-label={formatDate(day)}
+                aria-pressed={isEdge}
                 className={cn(
                   'mx-auto flex h-9 w-9 items-center justify-center rounded-full transition-colors',
                   !inMonth && 'text-gray-300',

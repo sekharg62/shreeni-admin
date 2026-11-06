@@ -1,8 +1,17 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Components from './pages/Components'
 import Placeholder from './pages/Placeholder'
+import TagsPage from './pages/tags/TagsPage'
+import ColorsPage from './pages/colors/ColorsPage'
+import CollectionsPage from './pages/collections/CollectionsPage'
+import CategoriesPage from './pages/categories/CategoriesPage'
+import ProductsPage from './pages/products/ProductsPage'
+import ProductEditorPage from './pages/products/ProductEditorPage'
+import BannersPage from './pages/banners/BannersPage'
+import DiscountsPage from './pages/discounts/DiscountsPage'
+import ReviewsPage from './pages/reviews/ReviewsPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './components/layout/AdminLayout'
 
@@ -17,30 +26,39 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/components" element={<Components />} />
-          <Route path="/products" element={<Placeholder title="Products" />} />
-          <Route
-            path="/categories"
-            element={<Placeholder title="Categories" />}
-          />
-          <Route
-            path="/inventory"
-            element={<Placeholder title="Inventory" />}
-          />
+
+          {/* Catalog */}
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/new" element={<ProductEditorPage key="new" />} />
+          <Route path="/products/:id" element={<ProductEditorRoute />} />
+          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/tags" element={<TagsPage />} />
+          <Route path="/colors" element={<ColorsPage />} />
+
+          {/* Marketing */}
+          <Route path="/discounts" element={<DiscountsPage />} />
+          <Route path="/banners" element={<BannersPage />} />
+
+          <Route path="/reviews" element={<ReviewsPage />} />
+
+          {/* Phase 2 */}
           <Route path="/orders" element={<Placeholder title="Orders" />} />
-          <Route
-            path="/customers"
-            element={<Placeholder title="Customers" />}
-          />
+          <Route path="/customers" element={<Placeholder title="Customers" />} />
+
           <Route path="/settings" element={<Placeholder title="Settings" />} />
-          <Route
-            path="/settings/profile"
-            element={<Placeholder title="Profile" />}
-          />
+          <Route path="/settings/profile" element={<Placeholder title="Profile" />} />
           <Route path="*" element={<Placeholder />} />
         </Route>
       </Route>
     </Routes>
   )
+}
+
+/** A fresh editor per product id (no state carried over from /products/new). */
+function ProductEditorRoute() {
+  const { id } = useParams()
+  return <ProductEditorPage key={id} id={id} />
 }
 
 export default App

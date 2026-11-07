@@ -4,7 +4,7 @@
  */
 export const ENDPOINTS = {
   auth: {
-    login: '/auth/login',
+    login: '/admin/auth/login',
   },
 
   categories: {

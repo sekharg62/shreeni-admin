@@ -27,7 +27,7 @@ export interface LoginPayload {
 }
 
 export const authService = {
-  /** POST /auth/login — verifies credentials, returns user + token. */
+  /** POST /admin/auth/login (admins only) — verifies credentials, returns user + token. */
   async login(payload: LoginPayload): Promise<LoginResponse> {
     const { data } = await apiClient.post<LoginResponse>(ENDPOINTS.auth.login, payload)
     // Persist the token so the request interceptor can attach it.

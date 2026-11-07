@@ -13,6 +13,8 @@ import type {
   Gender,
   ReviewStatus,
   SpecGroup,
+  SupportReason,
+  SupportStatus,
 } from '../constants/enums'
 import type { GstRate } from '../constants/app'
 import type { PaginationQuery } from './api'
@@ -218,4 +220,11 @@ export interface ReviewQuery extends PaginationQuery {
   productId?: string
   rating?: 1 | 2 | 3 | 4 | 5
   sortBy?: 'createdAt' | 'rating'
+}
+
+// ── Support ─────────────────────────────────────────────────────────────────
+export interface SupportTicketQuery extends PaginationQuery {
+  status?: SupportStatus
+  reason?: SupportReason
+  sortBy?: 'lastMessageAt' | 'createdAt'
 }

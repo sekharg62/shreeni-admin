@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { navItems, type NavItem } from './sidebarNav'
+import { useOpenSupportCount } from '../../pages/support/supportEvents'
 
 const APP_VERSION = '0.0.1'
 
@@ -73,6 +74,7 @@ function SidebarGroup({ item, pathname }: { item: NavItem; pathname: string }) {
 
 export default function Sidebar() {
   const { pathname } = useLocation()
+  const badges: Record<NonNullable<NavItem['badge']>, number> = { supportOpen: useOpenSupportCount() }
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col border-r border-gray-200 bg-white">
@@ -103,7 +105,15 @@ export default function Sidebar() {
               }
             >
               <item.icon className="h-5 w-5 shrink-0" />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {item.badge && badges[item.badge] > 0 && (
+                <span
+                  className="min-w-5 rounded-full bg-amber-500 px-1.5 py-0.5 text-center text-[11px] font-semibold leading-none text-white"
+                  aria-label={`${badges[item.badge]} waiting`}
+                >
+                  {badges[item.badge] > 99 ? '99+' : badges[item.badge]}
+                </span>
+              )}
             </NavLink>
           ),
         )}

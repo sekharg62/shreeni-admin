@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import {
   Blocks,
   LayoutDashboard,
+  LifeBuoy,
   Megaphone,
   MessageSquareText,
   Package,
@@ -17,6 +18,8 @@ export type NavItem = {
   icon: LucideIcon
   to?: string
   children?: NavChild[]
+  /** Live count pill next to the label. */
+  badge?: 'supportOpen'
 }
 
 // Single source of truth for the sidebar — add items/children here.
@@ -42,6 +45,7 @@ export const navItems: NavItem[] = [
     ],
   },
   { label: 'Reviews', icon: MessageSquareText, to: '/reviews' },
+  { label: 'Support', icon: LifeBuoy, to: '/support', badge: 'supportOpen' },
   { label: 'Orders', icon: ShoppingCart, to: '/orders' },
   { label: 'Customers', icon: Users, to: '/customers' },
   { label: 'Components', icon: Blocks, to: '/components' },

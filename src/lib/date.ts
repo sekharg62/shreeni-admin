@@ -41,3 +41,28 @@ export function formatDate(d: Date | null): string {
   if (!d) return ''
   return `${d.getDate()} ${MONTHS[d.getMonth()].slice(0, 3)} ${d.getFullYear()}`
 }
+
+const relFmt = new Intl.RelativeTimeFormat('en-IN', { numeric: 'auto' })
+const dateTimeFmt = new Intl.DateTimeFormat('en-IN', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+})
+
+/** "6 Nov 2026, 3:45 pm" */
+export function formatDateTime(iso: string): string {
+  return dateTimeFmt.format(new Date(iso))
+}
+
+/** "just now", "12 minutes ago", "yesterday", "3 days ago", then a date. */
+export function timeAgo(iso: string, now: number = Date.now()): string {
+  const seconds = Math.round((new Date(iso).getTime() - now) / 1000)
+  const abs = Math.abs(seconds)
+  if (abs < 45) return 'just now'
+  if (abs < 3600) return relFmt.format(Math.round(seconds / 60), 'minute')
+  if (abs < 86400) return relFmt.format(Math.round(seconds / 3600), 'hour')
+  if (abs < 7 * 86400) return relFmt.format(Math.round(seconds / 86400), 'day')
+  return new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(iso))
+}

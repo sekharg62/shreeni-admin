@@ -91,6 +91,14 @@ export const ENDPOINTS = {
     status: (id: string) => `/admin/reviews/${id}/status`,
   },
 
+  support: {
+    root: '/admin/support-tickets',
+    counts: '/admin/support-tickets/counts',
+    byId: (id: string) => `/admin/support-tickets/${id}`,
+    messages: (id: string) => `/admin/support-tickets/${id}/messages`,
+    status: (id: string) => `/admin/support-tickets/${id}/status`,
+  },
+
   uploads: {
     /** DELETE with { url } — discard an unused upload. */
     root: '/admin/uploads',

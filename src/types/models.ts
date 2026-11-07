@@ -9,6 +9,8 @@ import type {
   Gender,
   ReviewStatus,
   SpecGroup,
+  SupportReason,
+  SupportStatus,
 } from '../constants/enums'
 
 interface Timestamps {
@@ -267,6 +269,49 @@ export interface Review extends Timestamps {
 
 /** GET /admin/reviews/counts */
 export type ReviewCounts = Record<ReviewStatus | 'ALL', number>
+
+// ── Support ─────────────────────────────────────────────────────────────────
+export interface SupportCustomer {
+  id: string
+  firstName: string | null
+  lastName: string | null
+  phone: string
+  email: string | null
+}
+
+interface SupportTicketBase extends Timestamps {
+  id: string
+  /** shown as "SUP-1042" */
+  ticketNumber: number
+  reason: SupportReason
+  status: SupportStatus
+  description: string
+  lastMessageAt: string
+  closedAt: string | null
+  user: SupportCustomer
+}
+
+/** A row in GET /admin/support-tickets */
+export interface SupportTicketListItem extends SupportTicketBase {
+  messageCount: number
+  /** null = no replies yet */
+  lastReplyFrom: 'CUSTOMER' | 'SUPPORT' | null
+}
+
+export interface SupportMessage {
+  id: string
+  body: string
+  senderRole: 'CUSTOMER' | 'ADMIN'
+  createdAt: string
+  sender: { id: string; firstName: string | null; lastName: string | null }
+}
+
+/** GET /admin/support-tickets/:id */
+export interface SupportTicket extends SupportTicketBase {
+  messages: SupportMessage[]
+}
+
+export type SupportCounts = Record<SupportStatus | 'ALL', number>
 
 // ── Uploads ─────────────────────────────────────────────────────────────────
 /** POST /admin/uploads/banner */

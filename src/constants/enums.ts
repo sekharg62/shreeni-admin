@@ -104,6 +104,48 @@ export const REVIEW_STATUS_BADGE: Record<ReviewStatus, 'warning' | 'success' | '
   REJECTED: 'danger',
 }
 
+// ── Support ─────────────────────────────────────────────────────────────────
+export const SupportStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED',
+} as const
+export type SupportStatus = (typeof SupportStatus)[keyof typeof SupportStatus]
+export const SUPPORT_STATUS_LABELS: Record<SupportStatus, string> = {
+  OPEN: 'Open',
+  IN_PROGRESS: 'In progress',
+  RESOLVED: 'Resolved',
+  CLOSED: 'Closed',
+}
+export const SUPPORT_STATUS_BADGE: Record<SupportStatus, 'warning' | 'info' | 'success' | 'neutral'> = {
+  OPEN: 'warning',
+  IN_PROGRESS: 'info',
+  RESOLVED: 'success',
+  CLOSED: 'neutral',
+}
+
+export const SupportReason = {
+  ORDER_ISSUE: 'ORDER_ISSUE',
+  DELIVERY: 'DELIVERY',
+  PAYMENT: 'PAYMENT',
+  RETURN_REFUND: 'RETURN_REFUND',
+  PRODUCT_QUALITY: 'PRODUCT_QUALITY',
+  ACCOUNT: 'ACCOUNT',
+  OTHER: 'OTHER',
+} as const
+export type SupportReason = (typeof SupportReason)[keyof typeof SupportReason]
+export const SUPPORT_REASON_LABELS: Record<SupportReason, string> = {
+  ORDER_ISSUE: 'Order issue',
+  DELIVERY: 'Delivery',
+  PAYMENT: 'Payment',
+  RETURN_REFUND: 'Return / refund',
+  PRODUCT_QUALITY: 'Product quality',
+  ACCOUNT: 'Account',
+  OTHER: 'Other',
+}
+export const SUPPORT_REASON_OPTIONS = toOptions(SupportReason, SUPPORT_REASON_LABELS)
+
 // ── Addresses ───────────────────────────────────────────────────────────────
 export const AddressLabel = {
   HOME: 'HOME',

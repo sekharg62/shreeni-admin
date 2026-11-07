@@ -12,6 +12,8 @@ import ProductEditorPage from './pages/products/ProductEditorPage'
 import BannersPage from './pages/banners/BannersPage'
 import DiscountsPage from './pages/discounts/DiscountsPage'
 import ReviewsPage from './pages/reviews/ReviewsPage'
+import SupportPage from './pages/support/SupportPage'
+import SupportTicketPage from './pages/support/SupportTicketPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './components/layout/AdminLayout'
 
@@ -41,6 +43,8 @@ function App() {
           <Route path="/banners" element={<BannersPage />} />
 
           <Route path="/reviews" element={<ReviewsPage />} />
+          <Route path="/support" element={<SupportPage />} />
+          <Route path="/support/:id" element={<SupportTicketRoute />} />
 
           {/* Phase 2 */}
           <Route path="/orders" element={<Placeholder title="Orders" />} />
@@ -59,6 +63,12 @@ function App() {
 function ProductEditorRoute() {
   const { id } = useParams()
   return <ProductEditorPage key={id} id={id} />
+}
+
+/** A fresh ticket view per id (no reply draft carried over). */
+function SupportTicketRoute() {
+  const { id } = useParams()
+  return <SupportTicketPage key={id} />
 }
 
 export default App

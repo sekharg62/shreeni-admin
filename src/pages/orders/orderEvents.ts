@@ -5,29 +5,25 @@ import { orderService } from '../../services'
 export const ORDERS_CHANGED_EVENT = 'shreeni:orders-changed'
 export const notifyOrdersChanged = () => window.dispatchEvent(new Event(ORDERS_CHANGED_EVENT))
 
-const POLL_MS = 60_000
-
-/** Paid orders waiting to be packed or shipped. Polls every minute while the tab is visible. */
+/**
+ * Paid orders waiting to be packed or shipped. Loaded once when the admin opens (no polling —
+ * refresh the page to see new orders), and again after the admin changes an order's status.
+ */
 export function useOrdersToFulfil(): number {
   const [count, setCount] = useState(0)
   useEffect(() => {
     let alive = true
     const load = () => {
-      if (document.visibilityState !== 'visible') return
       orderService.counts().then(
         (c) => alive && setCount(c.TO_FULFIL),
         () => {},
       )
     }
     load()
-    const timer = setInterval(load, POLL_MS)
     window.addEventListener(ORDERS_CHANGED_EVENT, load)
-    document.addEventListener('visibilitychange', load)
     return () => {
       alive = false
-      clearInterval(timer)
       window.removeEventListener(ORDERS_CHANGED_EVENT, load)
-      document.removeEventListener('visibilitychange', load)
     }
   }, [])
   return count

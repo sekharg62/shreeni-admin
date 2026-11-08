@@ -19,6 +19,7 @@
  *   Homepage banners          bannerService
  *   Reviews (moderation)      reviewService
  *   Support tickets           supportService
+ *   Orders                    orderService
  *   Image uploads / discard   s3UploadService
  */
 export { default as apiClient, getApiErrorMessage, AUTH_TOKEN_KEY } from './apiClient'
@@ -39,4 +40,5 @@ export { discountService } from './discountService'
 export { bannerService } from './bannerService'
 export { reviewService } from './reviewService'
 export { supportService } from './supportService'
+export { orderService } from './orderService'
 export { s3UploadService } from './s3UploadService'

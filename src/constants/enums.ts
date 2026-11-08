@@ -189,6 +189,15 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   RETURNED: 'Returned',
 }
 export const ORDER_STATUS_OPTIONS = toOptions(OrderStatus, ORDER_STATUS_LABELS)
+export const ORDER_STATUS_BADGE: Record<OrderStatus, 'neutral' | 'success' | 'warning' | 'danger' | 'info'> = {
+  PENDING: 'warning',
+  CONFIRMED: 'info',
+  PACKED: 'info',
+  SHIPPED: 'info',
+  DELIVERED: 'success',
+  CANCELLED: 'danger',
+  RETURNED: 'neutral',
+}
 
 export const PaymentMethod = {
   PREPAID: 'PREPAID',
@@ -215,6 +224,12 @@ export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
   REFUNDED: 'Refunded',
 }
 export const PAYMENT_STATUS_OPTIONS = toOptions(PaymentStatus, PAYMENT_STATUS_LABELS)
+export const PAYMENT_STATUS_BADGE: Record<PaymentStatus, 'neutral' | 'success' | 'warning' | 'danger'> = {
+  CREATED: 'warning',
+  PAID: 'success',
+  FAILED: 'danger',
+  REFUNDED: 'neutral',
+}
 
 export const ShipmentStatus = {
   PENDING: 'PENDING',

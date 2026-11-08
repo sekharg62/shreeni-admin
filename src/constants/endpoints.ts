@@ -91,6 +91,13 @@ export const ENDPOINTS = {
     status: (id: string) => `/admin/reviews/${id}/status`,
   },
 
+  orders: {
+    root: '/admin/orders',
+    /** per-status counts + today's orders/revenue */
+    counts: '/admin/orders/counts',
+    byId: (id: string) => `/admin/orders/${id}`,
+    status: (id: string) => `/admin/orders/${id}/status`,
+  },
   support: {
     root: '/admin/support-tickets',
     counts: '/admin/support-tickets/counts',

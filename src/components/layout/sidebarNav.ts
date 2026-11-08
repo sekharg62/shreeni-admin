@@ -19,12 +19,13 @@ export type NavItem = {
   to?: string
   children?: NavChild[]
   /** Live count pill next to the label. */
-  badge?: 'supportOpen'
+  badge?: 'supportOpen' | 'ordersToFulfil'
 }
 
 // Single source of truth for the sidebar — add items/children here.
 export const navItems: NavItem[] = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
+  { label: 'Orders', icon: ShoppingCart, to: '/orders', badge: 'ordersToFulfil' },
   {
     label: 'Catalog',
     icon: Package,
@@ -46,7 +47,6 @@ export const navItems: NavItem[] = [
   },
   { label: 'Reviews', icon: MessageSquareText, to: '/reviews' },
   { label: 'Support', icon: LifeBuoy, to: '/support', badge: 'supportOpen' },
-  { label: 'Orders', icon: ShoppingCart, to: '/orders' },
   { label: 'Customers', icon: Users, to: '/customers' },
   // Developer component showcase: development builds only.
   ...(import.meta.env.DEV ? [{ label: 'Components (dev)', icon: Blocks, to: '/components' }] : []),

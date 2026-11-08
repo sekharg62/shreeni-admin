@@ -4,6 +4,7 @@ import { ChevronDown } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { navItems, type NavItem } from './sidebarNav'
 import { useOpenSupportCount } from '../../pages/support/supportEvents'
+import { useOrdersToFulfil } from '../../pages/orders/orderEvents'
 
 const APP_VERSION = '0.0.1'
 
@@ -74,7 +75,10 @@ function SidebarGroup({ item, pathname }: { item: NavItem; pathname: string }) {
 
 export default function Sidebar() {
   const { pathname } = useLocation()
-  const badges: Record<NonNullable<NavItem['badge']>, number> = { supportOpen: useOpenSupportCount() }
+  const badges: Record<NonNullable<NavItem['badge']>, number> = {
+    supportOpen: useOpenSupportCount(),
+    ordersToFulfil: useOrdersToFulfil(),
+  }
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col border-r border-gray-200 bg-white">

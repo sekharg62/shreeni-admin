@@ -2,11 +2,17 @@ import Badge from './Badge'
 import {
   CATALOG_STATUS_BADGE,
   CATALOG_STATUS_LABELS,
+  ORDER_STATUS_BADGE,
+  ORDER_STATUS_LABELS,
+  PAYMENT_STATUS_BADGE,
+  PAYMENT_STATUS_LABELS,
   REVIEW_STATUS_BADGE,
   REVIEW_STATUS_LABELS,
   SUPPORT_STATUS_BADGE,
   SUPPORT_STATUS_LABELS,
   type CatalogStatus,
+  type OrderStatus,
+  type PaymentStatus,
   type ReviewStatus,
   type SupportStatus,
 } from '../../constants/enums'
@@ -29,4 +35,14 @@ export function ActiveBadge({ active }: { active: boolean }) {
 /** Colored badge for a support ticket (Open / In progress / Resolved / Closed). */
 export function SupportStatusBadge({ status }: { status: SupportStatus }) {
   return <Badge variant={SUPPORT_STATUS_BADGE[status]}>{SUPPORT_STATUS_LABELS[status]}</Badge>
+}
+
+/** Colored badge for an order (Pending / Confirmed / … / Cancelled). */
+export function OrderStatusBadge({ status }: { status: OrderStatus }) {
+  return <Badge variant={ORDER_STATUS_BADGE[status]}>{ORDER_STATUS_LABELS[status]}</Badge>
+}
+
+/** Colored badge for a payment (Paid / Refunded / …). */
+export function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
+  return <Badge variant={PAYMENT_STATUS_BADGE[status]}>{PAYMENT_STATUS_LABELS[status]}</Badge>
 }

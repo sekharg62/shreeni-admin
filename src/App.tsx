@@ -14,6 +14,8 @@ import DiscountsPage from './pages/discounts/DiscountsPage'
 import ReviewsPage from './pages/reviews/ReviewsPage'
 import SupportPage from './pages/support/SupportPage'
 import SupportTicketPage from './pages/support/SupportTicketPage'
+import OrdersPage from './pages/orders/OrdersPage'
+import OrderDetailPage from './pages/orders/OrderDetailPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './components/layout/AdminLayout'
 
@@ -61,8 +63,10 @@ function App() {
           <Route path="/support" element={<SupportPage />} />
           <Route path="/support/:id" element={<SupportTicketRoute />} />
 
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetailRoute />} />
+
           {/* Phase 2 */}
-          <Route path="/orders" element={<Placeholder title="Orders" />} />
           <Route path="/customers" element={<Placeholder title="Customers" />} />
 
           <Route path="/settings" element={<Placeholder title="Settings" />} />
@@ -78,6 +82,12 @@ function App() {
 function ProductEditorRoute() {
   const { id } = useParams()
   return <ProductEditorPage key={id} id={id} />
+}
+
+/** A fresh order view per id (no open dialog carried over). */
+function OrderDetailRoute() {
+  const { id } = useParams()
+  return <OrderDetailPage key={id} />
 }
 
 /** A fresh ticket view per id (no reply draft carried over). */

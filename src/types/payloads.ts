@@ -11,6 +11,7 @@ import type {
   CatalogStatus,
   DiscountType,
   Gender,
+  OrderStatus,
   ReviewStatus,
   SpecGroup,
   SupportReason,
@@ -227,4 +228,23 @@ export interface SupportTicketQuery extends PaginationQuery {
   status?: SupportStatus
   reason?: SupportReason
   sortBy?: 'lastMessageAt' | 'createdAt'
+}
+
+// ── Orders ──────────────────────────────────────────────────────────────────
+export interface OrderQuery extends PaginationQuery {
+  status?: OrderStatus
+  /** YYYY-MM-DD, inclusive */
+  from?: string
+  to?: string
+  sortBy?: 'createdAt' | 'grandTotal'
+}
+
+/** PATCH /admin/orders/:id/status */
+export interface OrderStatusPayload {
+  status: OrderStatus
+  /** Shown to the customer on the order timeline. Required for cancellation. */
+  note?: string
+  /** Required when marking SHIPPED. */
+  deliveryPartner?: string
+  awb?: string
 }

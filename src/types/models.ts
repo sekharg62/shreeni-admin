@@ -7,7 +7,11 @@ import type {
   ColorType,
   DiscountType,
   Gender,
+  OrderStatus,
+  PaymentMethod,
+  PaymentStatus,
   ReviewStatus,
+  Role,
   SpecGroup,
   SupportReason,
   SupportStatus,
@@ -324,4 +328,95 @@ export interface UploadedImage {
   size: number
   /** bytes of the file that was sent */
   originalSize: number
+}
+
+// ── Orders ──────────────────────────────────────────────────────────────────
+/** A row in GET /admin/orders (amounts in paise). */
+export interface AdminOrderListItem {
+  id: string
+  /** e.g. "OD261108482913" */
+  orderNumber: string
+  status: OrderStatus
+  createdAt: string
+  grandTotal: number
+  discountCode: string | null
+  contactPhone: string
+  contactEmail: string | null
+  shipReceiverName: string
+  shipCity: string
+  shipState: string
+  userId: string | null
+  isGuest: boolean
+  itemCount: number
+  payment: { status: PaymentStatus; provider: string; method: PaymentMethod } | null
+}
+
+export interface AdminOrderEvent {
+  id: string
+  status: OrderStatus
+  label: string
+  note: string | null
+  createdAt: string
+  actor: { firstName: string | null; lastName: string | null; role: Role } | null
+}
+
+/** GET /admin/orders/:id */
+export interface AdminOrder {
+  id: string
+  orderNumber: string
+  status: OrderStatus
+  createdAt: string
+  updatedAt: string
+  subtotal: number
+  discountCode: string | null
+  discountTotal: number
+  shippingTotal: number
+  taxTotal: number
+  grandTotal: number
+  contactEmail: string | null
+  contactPhone: string
+  shipReceiverName: string
+  shipReceiverPhone: string
+  shipFlatHouseNo: string
+  shipApartmentSector: string | null
+  shipLandmark: string | null
+  shipCity: string
+  shipState: string
+  shipPincode: string
+  shipCountry: string
+  cancelledAt: string | null
+  cancelReason: string | null
+  isGuest: boolean
+  user: { id: string; firstName: string | null; lastName: string | null; email: string | null; phone: string } | null
+  items: {
+    id: string
+    name: string
+    sku: string | null
+    size: string | null
+    image: string | null
+    unitPrice: number
+    quantity: number
+    productId: string | null
+    variantId: string | null
+    product: { slug: string } | null
+  }[]
+  payments: {
+    id: string
+    provider: string
+    method: PaymentMethod
+    amount: number
+    status: PaymentStatus
+    gatewayOrderId: string | null
+    gatewayTxnId: string | null
+    paidAt: string | null
+    createdAt: string
+  }[]
+  shipment: { deliveryPartner: string; awb: string | null; status: string; shippedAt: string | null; deliveredAt: string | null } | null
+  events: AdminOrderEvent[]
+  /** Statuses this order can move to next. */
+  nextStatuses: OrderStatus[]
+}
+
+export type OrderCounts = Record<OrderStatus | 'ALL' | 'TO_FULFIL', number> & {
+  today: { orders: number; revenue: number }
 }

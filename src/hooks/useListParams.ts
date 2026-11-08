@@ -77,6 +77,8 @@ export function useListParams<F extends Record<string, string>>(options: {
     setLimit: (limit: number) => setUrl({ limit: String(limit), page: '1' }),
     setSort: (sort: string) => setUrl({ sort, page: '1' }),
     setFilter: (key: keyof F, value: string) => setUrl({ [key as string]: value, page: '1' }),
+    /** Several filters in one URL update (separate setFilter calls in a row could overwrite each other). */
+    setFilters: (patch: Partial<F>) => setUrl({ ...(patch as Record<string, string>), page: '1' }),
     hasActiveFilters: Boolean(url.search) || Object.keys(filterDefaults).some((k) => url[k] !== filterDefaults[k]),
     clearFilters: () => {
       setSearchInput('')

@@ -38,12 +38,15 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <Link
-        to="/components"
-        className="inline-flex rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700"
-      >
-        View Component Library →
-      </Link>
+      {/* Developer component showcase: development builds only. */}
+      {import.meta.env.DEV && (
+        <Link
+          to="/components"
+          className="inline-flex rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700"
+        >
+          View Component Library →
+        </Link>
+      )}
     </div>
   )
 }

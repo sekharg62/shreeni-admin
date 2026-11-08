@@ -274,7 +274,7 @@ export default function CategoryFormDrawer({ open, editingId, defaultParentId, t
             <ImageField
               label="Banner"
               aspect="16 / 5"
-              hint="Wide image at the top of the category page (about 1920 × 600)."
+              hint="Wide image at the top of the category page (about 1920 × 600). Desktop shows a 4:1 slice from the middle, so keep text in the centre."
               value={form.values.banner}
               onChange={(v) => form.set('banner', v)}
               testId="category-banner"

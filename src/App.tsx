@@ -1,7 +1,7 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import Components from './pages/Components'
 import Placeholder from './pages/Placeholder'
 import TagsPage from './pages/tags/TagsPage'
 import ColorsPage from './pages/colors/ColorsPage'
@@ -17,6 +17,12 @@ import SupportTicketPage from './pages/support/SupportTicketPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './components/layout/AdminLayout'
 
+/**
+ * Developer component showcase (sample data only). Development builds only: in production
+ * `import.meta.env.DEV` is false, so Vite drops this import and the page is not shipped.
+ */
+const Components = import.meta.env.DEV ? lazy(() => import('./pages/Components')) : null
+
 function App() {
   return (
     <Routes>
@@ -27,7 +33,16 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/components" element={<Components />} />
+          {Components && (
+            <Route
+              path="/components"
+              element={
+                <Suspense fallback={null}>
+                  <Components />
+                </Suspense>
+              }
+            />
+          )}
 
           {/* Catalog */}
           <Route path="/products" element={<ProductsPage />} />

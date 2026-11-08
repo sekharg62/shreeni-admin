@@ -48,7 +48,8 @@ export const navItems: NavItem[] = [
   { label: 'Support', icon: LifeBuoy, to: '/support', badge: 'supportOpen' },
   { label: 'Orders', icon: ShoppingCart, to: '/orders' },
   { label: 'Customers', icon: Users, to: '/customers' },
-  { label: 'Components', icon: Blocks, to: '/components' },
+  // Developer component showcase: development builds only.
+  ...(import.meta.env.DEV ? [{ label: 'Components (dev)', icon: Blocks, to: '/components' }] : []),
   {
     label: 'Settings',
     icon: Settings,

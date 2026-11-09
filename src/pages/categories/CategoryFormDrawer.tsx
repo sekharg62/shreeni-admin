@@ -30,6 +30,7 @@ type Values = {
   parentId: string
   gender: string
   description: string
+  tagline: string
   status: CatalogStatus
   banner: ImageValue
   poster: ImageValue
@@ -41,6 +42,7 @@ const BLANK: Values = {
   parentId: '',
   gender: '',
   description: '',
+  tagline: '',
   status: CatalogStatus.DRAFT,
   banner: emptyImage(),
   poster: emptyImage(),
@@ -94,6 +96,7 @@ export default function CategoryFormDrawer({ open, editingId, defaultParentId, t
         parentId: c.parentId ?? '',
         gender: c.gender ?? '',
         description: c.description ?? '',
+        tagline: c.tagline ?? '',
         status: c.status,
         banner: emptyImage(c.bannerUrl),
         poster: emptyImage(c.posterUrl),
@@ -147,6 +150,7 @@ export default function CategoryFormDrawer({ open, editingId, defaultParentId, t
         name: v.name.trim(),
         slug: v.slug || undefined,
         description: v.description.trim() || undefined,
+        tagline: v.tagline.trim() || null,
         parentId,
         gender: (v.gender || undefined) as Gender | undefined,
         status: v.status,
@@ -249,6 +253,15 @@ export default function CategoryFormDrawer({ open, editingId, defaultParentId, t
                 onChange={(v) => form.set('gender', v)}
               />
             </div>
+            <Input
+              id="category-tagline"
+              label="Card tagline"
+              maxLength={60}
+              placeholder="Mythology woven in silk"
+              hint={`One short line under the name on the storefront card · ${form.values.tagline.length}/60`}
+              value={form.values.tagline}
+              onChange={(e) => form.set('tagline', e.target.value)}
+            />
             <Textarea
               id="category-description"
               label="Description"

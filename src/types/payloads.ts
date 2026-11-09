@@ -26,6 +26,8 @@ export interface CreateCategoryPayload {
   /** auto-generated from name when omitted */
   slug?: string
   description?: string
+  /** One short line on the storefront card (max 60); null clears it. */
+  tagline?: string | null
   /** null / omitted = top-level */
   parentId?: string | null
   gender?: Gender

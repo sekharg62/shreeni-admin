@@ -29,6 +29,7 @@ export interface Category extends Timestamps {
   name: string
   slug: string
   description: string | null
+  tagline: string | null
   parentId: string | null
   gender: Gender | null
   bannerUrl: string | null

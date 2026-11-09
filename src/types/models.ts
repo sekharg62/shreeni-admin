@@ -3,6 +3,7 @@
  * Dates are ISO strings. Decimals (lengthCm/widthCm) arrive as strings.
  */
 import type {
+  AddressLabel,
   CatalogStatus,
   ColorType,
   DiscountType,
@@ -419,4 +420,48 @@ export interface AdminOrder {
 
 export type OrderCounts = Record<OrderStatus | 'ALL' | 'TO_FULFIL', number> & {
   today: { orders: number; revenue: number }
+}
+
+// ── Customers ───────────────────────────────────────────────────────────────
+/** A row in GET /admin/customers. `totalSpent` is paise across confirmed/packed/shipped/delivered orders. */
+export interface AdminCustomer {
+  id: string
+  firstName: string | null
+  lastName: string | null
+  email: string | null
+  phone: string
+  phoneVerified: boolean
+  emailVerified: boolean
+  createdAt: string
+  addressCount: number
+  /** Every order except ones still awaiting payment. */
+  orderCount: number
+  /** Cancelled or returned (included in orderCount, not in totalSpent). */
+  cancelledCount: number
+  totalSpent: number
+  lastOrderAt: string | null
+}
+
+export interface CustomerAddress {
+  id: string
+  label: AddressLabel
+  receiverName: string
+  receiverPhone: string
+  flatHouseNo: string
+  apartmentSector: string | null
+  landmark: string | null
+  city: string
+  state: string
+  pincode: string
+  country: string
+  isDefault: boolean
+  createdAt: string
+}
+
+/** GET /admin/customers/:id — loaded when a row is expanded. */
+export interface AdminCustomerDetail {
+  id: string
+  addresses: CustomerAddress[]
+  /** 5 latest orders (not counting ones awaiting payment). */
+  orders: { id: string; orderNumber: string; status: OrderStatus; grandTotal: number; createdAt: string }[]
 }

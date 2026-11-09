@@ -6,7 +6,6 @@ import {
   Megaphone,
   MessageSquareText,
   Package,
-  Settings,
   ShoppingCart,
   Users,
 } from 'lucide-react'
@@ -50,12 +49,4 @@ export const navItems: NavItem[] = [
   { label: 'Customers', icon: Users, to: '/customers' },
   // Developer component showcase: development builds only.
   ...(import.meta.env.DEV ? [{ label: 'Components (dev)', icon: Blocks, to: '/components' }] : []),
-  {
-    label: 'Settings',
-    icon: Settings,
-    children: [
-      { label: 'General', to: '/settings' },
-      { label: 'Profile', to: '/settings/profile' },
-    ],
-  },
 ]

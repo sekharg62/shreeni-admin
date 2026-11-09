@@ -16,6 +16,7 @@ import SupportPage from './pages/support/SupportPage'
 import SupportTicketPage from './pages/support/SupportTicketPage'
 import OrdersPage from './pages/orders/OrdersPage'
 import OrderDetailPage from './pages/orders/OrderDetailPage'
+import CustomersPage from './pages/customers/CustomersPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './components/layout/AdminLayout'
 
@@ -65,12 +66,8 @@ function App() {
 
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailRoute />} />
+          <Route path="/customers" element={<CustomersPage />} />
 
-          {/* Phase 2 */}
-          <Route path="/customers" element={<Placeholder title="Customers" />} />
-
-          <Route path="/settings" element={<Placeholder title="Settings" />} />
-          <Route path="/settings/profile" element={<Placeholder title="Profile" />} />
           <Route path="*" element={<Placeholder />} />
         </Route>
       </Route>

@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useMemo, useState, type ReactNode } from 'react'
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import { cn } from '../../lib/cn'
 
@@ -23,6 +23,8 @@ type TableProps<T> = {
   emptyMessage?: string
   /** Highlight a row (e.g. selected with a checkbox). */
   isRowSelected?: (row: T) => boolean
+  /** Content shown in a full-width row under this one (return null when collapsed). */
+  renderExpanded?: (row: T) => ReactNode
 }
 
 const alignMap = {
@@ -38,6 +40,7 @@ export default function Table<T>({
   onRowClick,
   emptyMessage = 'No data',
   isRowSelected,
+  renderExpanded,
 }: TableProps<T>) {
   const [sort, setSort] = useState<SortState>(null)
 
@@ -118,30 +121,43 @@ export default function Table<T>({
               </td>
             </tr>
           ) : (
-            sortedData.map((row) => (
-              <tr
-                key={rowKey(row)}
-                onClick={() => onRowClick?.(row)}
-                className={cn(
-                  'border-b border-gray-100 last:border-0 transition-colors',
-                  onRowClick && 'cursor-pointer hover:bg-gray-50',
-                  isRowSelected?.(row) && 'bg-gray-50',
-                )}
-              >
-                {columns.map((col, i) => (
-                  <td
-                    key={i}
+            sortedData.map((row) => {
+              const expanded = renderExpanded?.(row) ?? null
+              const isOpen = expanded !== null && expanded !== false
+              return (
+                <Fragment key={rowKey(row)}>
+                  <tr
+                    onClick={() => onRowClick?.(row)}
                     className={cn(
-                      'px-4 py-3 text-gray-700',
-                      alignMap[col.align ?? 'left'],
-                      col.className,
+                      'border-b border-gray-100 last:border-0 transition-colors',
+                      onRowClick && 'cursor-pointer hover:bg-gray-50',
+                      (isRowSelected?.(row) || isOpen) && 'bg-gray-50',
+                      isOpen && 'border-b-0',
                     )}
                   >
-                    {col.cell(row)}
-                  </td>
-                ))}
-              </tr>
-            ))
+                    {columns.map((col, i) => (
+                      <td
+                        key={i}
+                        className={cn(
+                          'px-4 py-3 text-gray-700',
+                          alignMap[col.align ?? 'left'],
+                          col.className,
+                        )}
+                      >
+                        {col.cell(row)}
+                      </td>
+                    ))}
+                  </tr>
+                  {isOpen && (
+                    <tr className="border-b border-gray-100 bg-gray-50 last:border-0">
+                      <td colSpan={columns.length} className="px-4 pb-4 pt-1">
+                        {expanded}
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              )
+            })
           )}
         </tbody>
       </table>

@@ -98,6 +98,11 @@ export const ENDPOINTS = {
     byId: (id: string) => `/admin/orders/${id}`,
     status: (id: string) => `/admin/orders/${id}/status`,
   },
+  customers: {
+    root: '/admin/customers',
+    /** saved addresses + latest orders */
+    byId: (id: string) => `/admin/customers/${id}`,
+  },
   support: {
     root: '/admin/support-tickets',
     counts: '/admin/support-tickets/counts',

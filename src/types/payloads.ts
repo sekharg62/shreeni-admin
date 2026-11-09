@@ -239,6 +239,10 @@ export interface OrderQuery extends PaginationQuery {
   sortBy?: 'createdAt' | 'grandTotal'
 }
 
+export interface CustomerQuery extends PaginationQuery {
+  sortBy?: 'createdAt' | 'orderCount' | 'totalSpent' | 'lastOrderAt'
+}
+
 /** PATCH /admin/orders/:id/status */
 export interface OrderStatusPayload {
   status: OrderStatus

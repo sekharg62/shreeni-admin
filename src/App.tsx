@@ -10,6 +10,7 @@ import CategoriesPage from './pages/categories/CategoriesPage'
 import ProductsPage from './pages/products/ProductsPage'
 import ProductEditorPage from './pages/products/ProductEditorPage'
 import BannersPage from './pages/banners/BannersPage'
+import HomePicksPage from './pages/home-picks/HomePicksPage'
 import DiscountsPage from './pages/discounts/DiscountsPage'
 import ReviewsPage from './pages/reviews/ReviewsPage'
 import SupportPage from './pages/support/SupportPage'
@@ -59,6 +60,7 @@ function App() {
           {/* Marketing */}
           <Route path="/discounts" element={<DiscountsPage />} />
           <Route path="/banners" element={<BannersPage />} />
+          <Route path="/home-picks" element={<HomePicksPage />} />
 
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/support" element={<SupportPage />} />

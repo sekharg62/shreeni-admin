@@ -13,11 +13,13 @@ type Props = {
   onChange: (value: PickedProduct[]) => void
   /** never offered (e.g. the product being edited) */
   excludeId?: string
+  /** also never offered (e.g. products already in another list) */
+  excludeIds?: string[]
   max?: number
 }
 
 /** Search products by name/SKU and pick several (used for "You may also like"). */
-export default function ProductPicker({ label, value, onChange, excludeId, max = 12 }: Props) {
+export default function ProductPicker({ label, value, onChange, excludeId, excludeIds, max = 12 }: Props) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [results, setResults] = useState<ProductListItem[]>([])
@@ -40,7 +42,7 @@ export default function ProductPicker({ label, value, onChange, excludeId, max =
     }
   }, [debounced, open])
 
-  const picked = new Set(value.map((p) => p.id))
+  const picked = new Set([...value.map((p) => p.id), ...(excludeIds ?? [])])
   const options = results.filter((p) => p.id !== excludeId && !picked.has(p.id))
   const full = value.length >= max
 

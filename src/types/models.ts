@@ -250,6 +250,38 @@ export interface Banner extends Timestamps {
   status: CatalogStatus
 }
 
+// ── Homepage picks ──────────────────────────────────────────────────────────
+/** Why a pick isn't on the homepage right now (null = live). Same rule as the storefront. */
+export type HomePickHiddenReason =
+  | 'switched-off'
+  | 'scheduled'
+  | 'ended'
+  | 'product-unpublished'
+  | 'category-unpublished'
+  | 'out-of-stock'
+
+export interface HomePick extends Timestamps {
+  id: string
+  badge: string | null
+  sortOrder: number
+  isActive: boolean
+  startsAt: string | null
+  endsAt: string | null
+  /** Prices in paise. */
+  product: {
+    id: string
+    name: string
+    slug: string
+    status: CatalogStatus
+    categoryName: string
+    imageUrl: string | null
+    price: number
+    compareAtPrice: number | null
+    inStock: boolean
+  }
+  hiddenReason: HomePickHiddenReason | null
+}
+
 // ── Reviews ─────────────────────────────────────────────────────────────────
 export interface Review extends Timestamps {
   id: string

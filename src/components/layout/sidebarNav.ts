@@ -1,8 +1,8 @@
 import type { LucideIcon } from 'lucide-react'
 import {
   Blocks,
+  Headphones,
   LayoutDashboard,
-  LifeBuoy,
   Megaphone,
   MessageSquareText,
   Package,
@@ -42,10 +42,11 @@ export const navItems: NavItem[] = [
     children: [
       { label: 'Discounts', to: '/discounts' },
       { label: 'Banners', to: '/banners' },
+      { label: 'Homepage picks', to: '/home-picks' },
     ],
   },
   { label: 'Reviews', icon: MessageSquareText, to: '/reviews' },
-  { label: 'Support', icon: LifeBuoy, to: '/support', badge: 'supportOpen' },
+  { label: 'Support', icon: Headphones, to: '/support', badge: 'supportOpen' },
   { label: 'Customers', icon: Users, to: '/customers' },
   // Developer component showcase: development builds only.
   ...(import.meta.env.DEV ? [{ label: 'Components (dev)', icon: Blocks, to: '/components' }] : []),

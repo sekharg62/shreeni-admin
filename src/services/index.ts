@@ -17,6 +17,7 @@
  *   Tags · Colors · Collections tagService · colorService · collectionService
  *   Discounts (coupons)       discountService
  *   Homepage banners          bannerService
+ *   Homepage picks            homePickService
  *   Reviews (moderation)      reviewService
  *   Support tickets           supportService
  *   Orders                    orderService
@@ -39,6 +40,7 @@ export {
 export { tagService, colorService, collectionService } from './catalogServices'
 export { discountService } from './discountService'
 export { bannerService } from './bannerService'
+export { homePickService } from './homePickService'
 export { reviewService } from './reviewService'
 export { supportService } from './supportService'
 export { orderService } from './orderService'

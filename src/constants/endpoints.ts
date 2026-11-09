@@ -83,6 +83,13 @@ export const ENDPOINTS = {
     status: (id: string) => `/admin/banners/${id}/status`,
   },
 
+  /** Homepage "Handpicked for You" list (small, not paginated). */
+  homePicks: {
+    root: '/admin/home-picks',
+    reorder: '/admin/home-picks/reorder',
+    byId: (id: string) => `/admin/home-picks/${id}`,
+  },
+
   reviews: {
     root: '/admin/reviews',
     counts: '/admin/reviews/counts',

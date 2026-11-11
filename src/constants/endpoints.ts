@@ -104,6 +104,10 @@ export const ENDPOINTS = {
     counts: '/admin/orders/counts',
     byId: (id: string) => `/admin/orders/${id}`,
     status: (id: string) => `/admin/orders/${id}/status`,
+    /** GET → invoice PDF */
+    invoice: (id: string) => `/admin/orders/${id}/invoice`,
+    /** POST { ids } → shipping labels PDF (A6, 4 per A4 page) */
+    labels: '/admin/orders/labels',
   },
   customers: {
     root: '/admin/customers',

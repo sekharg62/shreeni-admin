@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Ban, CheckCircle2, Copy, Mail, MapPin, PackageCheck, Phone, RotateCcw, Truck, User, Wallet } from 'lucide-react'
+import { Ban, CheckCircle2, Copy, FileDown, Mail, MapPin, PackageCheck, Phone, RotateCcw, Truck, User, Wallet } from 'lucide-react'
 import PageHeader from '../../components/layout/PageHeader'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
@@ -20,6 +20,20 @@ import { formatPaise } from '../../lib/money'
 import { cn } from '../../lib/cn'
 import type { AdminOrder } from '../../types/models'
 import { formatPhone, notifyOrdersChanged, spacedOrderNumber } from './orderEvents'
+
+/** A failed PDF request carries its JSON error as a Blob: read the server's message out of it. */
+async function blobErrorMessage(err: unknown): Promise<string> {
+  const data = (err as { response?: { data?: unknown } })?.response?.data
+  if (data instanceof Blob) {
+    try {
+      const body = JSON.parse(await data.text()) as { message?: unknown }
+      if (typeof body.message === 'string') return body.message
+    } catch {
+      /* not JSON */
+    }
+  }
+  return getApiErrorMessage(err)
+}
 
 /** How each next step is offered to the admin. */
 const ACTIONS: Record<OrderStatus, { label: string; icon: typeof Truck; variant: 'primary' | 'outline' | 'danger'; help: string }> = {
@@ -125,6 +139,7 @@ export default function OrderDetailPage() {
   const { id = '' } = useParams()
   const order = useApi(() => orderService.get(id), [id])
   const [dialog, setDialog] = useState<OrderStatus | null>(null)
+  const [downloading, setDownloading] = useState(false)
   const toast = useToast()
   const o = order.data
   const crumbs = [{ label: 'Orders', to: '/orders' }, { label: o ? spacedOrderNumber(o.orderNumber) : 'Order' }]
@@ -153,6 +168,27 @@ export default function OrderDetailPage() {
   const payment = o.payments[0]
   const forward = o.nextStatuses.filter((s) => s !== 'CANCELLED' && s !== 'RETURNED')
   const backward = o.nextStatuses.filter((s) => s === 'CANCELLED' || s === 'RETURNED')
+
+  const downloadInvoice = async () => {
+    setDownloading(true)
+    try {
+      const blob = await orderService.invoice(o.id)
+      const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }))
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `Shreeni-Invoice-${(o.invoiceNumber ?? o.orderNumber).replace(/\//g, '-')}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000)
+      // A pre-invoice order gets its number on first download: refresh to show it.
+      if (!o.invoiceNumber) void order.refetch()
+    } catch (err) {
+      toast.error(await blobErrorMessage(err))
+    } finally {
+      setDownloading(false)
+    }
+  }
   const address = [o.shipFlatHouseNo, o.shipApartmentSector, o.shipLandmark, `${o.shipCity}, ${o.shipState} ${o.shipPincode}`].filter(Boolean)
 
   return (
@@ -162,8 +198,13 @@ export default function OrderDetailPage() {
         description={`Placed ${formatDateTime(o.createdAt)} (${timeAgo(o.createdAt)})`}
         breadcrumbs={crumbs}
         actions={
-          o.nextStatuses.length > 0 && (
+          (o.nextStatuses.length > 0 || o.hasInvoice) && (
             <div className="flex flex-wrap gap-2">
+              {o.hasInvoice && (
+                <Button variant="outline" leftIcon={<FileDown className="h-4 w-4" />} isLoading={downloading} onClick={() => void downloadInvoice()}>
+                  Invoice
+                </Button>
+              )}
               {backward.map((s) => {
                 const a = ACTIONS[s]
                 return (
@@ -189,6 +230,7 @@ export default function OrderDetailPage() {
         <OrderStatusBadge status={o.status} />
         {payment && <PaymentStatusBadge status={payment.status} />}
         {o.isGuest && <Badge>Guest checkout</Badge>}
+        {o.invoiceNumber && <Badge variant="info">Invoice {o.invoiceNumber}</Badge>}
         {o.status === 'CANCELLED' && o.cancelReason && <span className="text-sm text-red-700">Reason: {o.cancelReason}</span>}
       </div>
 

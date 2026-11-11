@@ -22,6 +22,18 @@ export const orderService = {
     return data
   },
 
+  /** The order's invoice PDF (numbered on first download if it was confirmed before invoices existed). */
+  async invoice(id: string): Promise<Blob> {
+    const { data } = await apiClient.get<Blob>(ENDPOINTS.orders.invoice(id), { responseType: 'blob', timeout: 30000 })
+    return data
+  },
+
+  /** Printable shipping labels for these orders (A6, four per A4 page), oldest first. Max 100. */
+  async labels(ids: string[]): Promise<Blob> {
+    const { data } = await apiClient.post<Blob>(ENDPOINTS.orders.labels, { ids }, { responseType: 'blob', timeout: 60000 })
+    return data
+  },
+
   /** Stock, coupon use, shipment and refunds are handled by the server. Returns the updated order. */
   async setStatus(id: string, payload: OrderStatusPayload): Promise<AdminOrder> {
     const { data } = await apiClient.patch<AdminOrder>(ENDPOINTS.orders.status(id), payload)

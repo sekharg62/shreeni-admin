@@ -398,6 +398,11 @@ export interface AdminOrderEvent {
 export interface AdminOrder {
   id: string
   orderNumber: string
+  /** GST invoice number, e.g. "SHR/26-27/0001"; null until confirmed. */
+  invoiceNumber: string | null
+  invoicedAt: string | null
+  /** A PDF invoice can be downloaded. */
+  hasInvoice: boolean
   status: OrderStatus
   createdAt: string
   updatedAt: string

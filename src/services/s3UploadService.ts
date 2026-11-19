@@ -75,6 +75,22 @@ export const s3UploadService = {
     return data
   },
 
+  /** Journal cover or in-post image → journal/{uuid}.webp (converted to WebP, ≤1600 px wide). */
+  async uploadJournalImage(file: File, onProgress?: ProgressFn): Promise<UploadedImage> {
+    const form = new FormData()
+    form.append('file', file)
+    const { data } = await apiClient.post<UploadedImage>(ENDPOINTS.uploads.journal, form, multipartConfig(onProgress))
+    return data
+  },
+
+  /** Journal author photo → journal/authors/{uuid}.webp (WebP, ≤400 px wide). */
+  async uploadJournalAuthorImage(file: File, onProgress?: ProgressFn): Promise<UploadedImage> {
+    const form = new FormData()
+    form.append('file', file)
+    const { data } = await apiClient.post<UploadedImage>(ENDPOINTS.uploads.journalAuthor, form, multipartConfig(onProgress))
+    return data
+  },
+
   /**
    * Discard an uploaded image that was never saved on a record
    * (e.g. the admin uploaded a banner image, then clicked Cancel).

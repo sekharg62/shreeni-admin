@@ -126,5 +126,20 @@ export const ENDPOINTS = {
     /** DELETE with { url } — discard an unused upload. */
     root: '/admin/uploads',
     banner: '/admin/uploads/banner',
+    /** Journal covers + images inside posts → journal/{uuid}.webp */
+    journal: '/admin/uploads/journal',
+    /** Journal author photos → journal/authors/{uuid}.webp */
+    journalAuthor: '/admin/uploads/journal-author',
+  },
+
+  journal: {
+    posts: '/admin/journal/posts',
+    post: (id: string) => `/admin/journal/posts/${id}`,
+    linkTargets: '/admin/journal/link-targets',
+    tags: '/admin/journal/tags',
+    categories: '/admin/journal/categories',
+    category: (id: string) => `/admin/journal/categories/${id}`,
+    authors: '/admin/journal/authors',
+    author: (id: string) => `/admin/journal/authors/${id}`,
   },
 } as const

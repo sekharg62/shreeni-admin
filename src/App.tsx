@@ -11,6 +11,9 @@ import ProductsPage from './pages/products/ProductsPage'
 import ProductEditorPage from './pages/products/ProductEditorPage'
 import BannersPage from './pages/banners/BannersPage'
 import HomePicksPage from './pages/home-picks/HomePicksPage'
+import JournalPostsPage from './pages/journal/JournalPostsPage'
+import JournalCategoriesPage from './pages/journal/JournalCategoriesPage'
+import JournalAuthorsPage from './pages/journal/JournalAuthorsPage'
 import DiscountsPage from './pages/discounts/DiscountsPage'
 import ReviewsPage from './pages/reviews/ReviewsPage'
 import SupportPage from './pages/support/SupportPage'
@@ -26,6 +29,10 @@ import AdminLayout from './components/layout/AdminLayout'
  * `import.meta.env.DEV` is false, so Vite drops this import and the page is not shipped.
  */
 const Components = import.meta.env.DEV ? lazy(() => import('./pages/Components')) : null
+
+/** The Journal editor brings the rich-text editor (Tiptap): loaded only when it's opened. */
+const JournalEditorPage = lazy(() => import('./pages/journal/JournalEditorPage'))
+const editorFallback = <div className="h-[600px] animate-pulse rounded-xl bg-white" />
 
 function App() {
   return (
@@ -62,6 +69,20 @@ function App() {
           <Route path="/banners" element={<BannersPage />} />
           <Route path="/home-picks" element={<HomePicksPage />} />
 
+          {/* Journal (blog) */}
+          <Route path="/journal" element={<JournalPostsPage />} />
+          <Route
+            path="/journal/new"
+            element={
+              <Suspense fallback={editorFallback}>
+                <JournalEditorPage key="new" />
+              </Suspense>
+            }
+          />
+          <Route path="/journal/categories" element={<JournalCategoriesPage />} />
+          <Route path="/journal/authors" element={<JournalAuthorsPage />} />
+          <Route path="/journal/:id" element={<JournalEditorRoute />} />
+
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/support" element={<SupportPage />} />
           <Route path="/support/:id" element={<SupportTicketRoute />} />
@@ -81,6 +102,16 @@ function App() {
 function ProductEditorRoute() {
   const { id } = useParams()
   return <ProductEditorPage key={id} id={id} />
+}
+
+/** A fresh Journal editor per post id. */
+function JournalEditorRoute() {
+  const { id } = useParams()
+  return (
+    <Suspense fallback={editorFallback}>
+      <JournalEditorPage key={id} id={id} />
+    </Suspense>
+  )
 }
 
 /** A fresh order view per id (no open dialog carried over). */

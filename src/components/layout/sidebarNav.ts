@@ -4,6 +4,7 @@ import {
   Headphones,
   LayoutDashboard,
   Megaphone,
+  NotebookPen,
   MessageSquareText,
   Package,
   ShoppingCart,
@@ -43,6 +44,15 @@ export const navItems: NavItem[] = [
       { label: 'Discounts', to: '/discounts' },
       { label: 'Banners', to: '/banners' },
       { label: 'Homepage picks', to: '/home-picks' },
+    ],
+  },
+  {
+    label: 'Journal',
+    icon: NotebookPen,
+    children: [
+      { label: 'Posts', to: '/journal' },
+      { label: 'Categories', to: '/journal/categories' },
+      { label: 'Authors', to: '/journal/authors' },
     ],
   },
   { label: 'Reviews', icon: MessageSquareText, to: '/reviews' },

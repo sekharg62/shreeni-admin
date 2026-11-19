@@ -16,3 +16,6 @@ export const MAX_IMAGES_PER_UPLOAD = 10
 
 /** Money is stored and sent in paise: ₹1 = 100. */
 export const PAISE_PER_RUPEE = 100
+
+/** The storefront, for "View on site" links (e.g. Journal posts). */
+export const STOREFRONT_URL = (import.meta.env.VITE_STOREFRONT_URL ?? 'http://localhost:3000').replace(/\/$/, '')
